@@ -2,19 +2,21 @@ const express = require('express');
 
 const app = express();
 
-const user = ['amir']
+const {adminAuth, userAuth} = require("./middleware/auth")
 
-app.get("/user", (req, res) => {
+app.get("/user",userAuth, (req, res) => {
     res.send({ firstName: "Amir", lastName: "Ali" })
 })
 
-app.post("/user", (req, res) => {
+app.use('/admin', adminAuth)
+
+app.post("/user/login", (req, res) => {
     console.log(req.body)
     //saving to db
     res.send("Data Saved successfully")
 })
 
-app.delete("/user", (req, res) => {
+app.delete("/user", userAuth, (req, res) => {
     res.send("Deleted successfully")
 })
 
@@ -50,6 +52,13 @@ app.use("/handlers", (req, res, next) => {
     next()
 }],
 )
+
+app.get("/admin/getAllData", (req,res)=>{
+    res.send("All Admin data")
+})
+app.get("/admin/deleteAllData", (req,res)=>{
+    res.send("Dete all Admin data")
+})
 
 app.listen(7777, () => {
     console.log("Server running");
