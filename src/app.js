@@ -1,65 +1,32 @@
 const express = require('express');
-
 const app = express();
+const connectDB = require("./config/database")
+const User = require("./models/user")
 
-const {adminAuth, userAuth} = require("./middleware/auth")
+app.post("/signup", async (req, res) => {
+    const user = new User({
+        firstName: "raza",
+        lastName: "ali",
+        emailId: "raza@gmail.com",
+        password: "3456"
+    })
 
-app.get("/user",userAuth, (req, res) => {
-    res.send({ firstName: "Amir", lastName: "Ali" })
+    try {
+        await user.save()
+        res.send("User Added Successfully");
+    } catch (err) {
+        res.status(400).send("Error saving the user:" + err.message);
+    }
 })
 
-app.use('/admin', adminAuth)
 
-app.post("/user/login", (req, res) => {
-    console.log(req.body)
-    //saving to db
-    res.send("Data Saved successfully")
-})
+connectDB()
+    .then(() => {
+        console.log("DB Connection Established");
+        app.listen(7777, () => {
+            console.log("Server running");
+        })
+    }).catch((err) => {
+        console.error("DB COnnection can't be established");
+    })
 
-app.delete("/user", userAuth, (req, res) => {
-    res.send("Deleted successfully")
-})
-
-app.get(/.*fly$/, (req, res) => {
-    res.send("Hello from hellow url")
-})
-
-app.get("/test", (req, res) => {
-    console.log(req.query);
-    res.send("Req Query Tested")
-})
-
-app.get("/paramstest/:name", (req, res) => {
-    console.log(req.params);
-    res.send("Req Params Tested")
-})
-
-app.use("/handlers", (req, res, next) => {
-    console.log("1st handler");
-    // res.send("1st handler")
-    next()
-}, (req, res, next) => {
-    console.log("2nd handler");
-    // res.send("2nd handler")
-    next()
-},[ (req, res, next) => {
-    console.log("3rd handler");
-    // res.send("3rd handler")
-    next()
-}, (req, res, next) => {
-    console.log("4th handler");
-    res.send("4th handler")
-    next()
-}],
-)
-
-app.get("/admin/getAllData", (req,res)=>{
-    res.send("All Admin data")
-})
-app.get("/admin/deleteAllData", (req,res)=>{
-    res.send("Dete all Admin data")
-})
-
-app.listen(7777, () => {
-    console.log("Server running");
-})
