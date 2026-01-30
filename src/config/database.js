@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
+
+const mongoDBURL = process.env.MONGO_URI;
 
 const connectDB = async () => {
-    await mongoose.connect("mongodb+srv://amirali531361:amirali531361@cluster0.t3adoy2.mongodb.net/devVibe");
+    await mongoose.connect(mongoDBURL);
 }
 
 module.exports = connectDB;
