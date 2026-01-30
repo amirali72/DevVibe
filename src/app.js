@@ -17,6 +17,34 @@ app.post("/signup", async (req, res) => {
     }
 })
 
+app.get("/user", async (req, res) => {
+
+    try {
+        const users = await User.find({ emailId: req.body.emailId })
+        res.send(users);
+    } catch (error) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
+app.get("/feed", async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.send(users)
+    } catch (error) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
+app.get("/findbyid", async (req, res) => {
+    try {
+        const user = await User.findById("697d043d38bae3b0dd4485de");
+        res.send(user)
+    } catch (error) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
 
 connectDB()
     .then(() => {
