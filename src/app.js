@@ -37,9 +37,40 @@ app.get("/feed", async (req, res) => {
 })
 
 app.get("/findbyid", async (req, res) => {
+    const userId = req.body.userId;
     try {
-        const user = await User.findById("697d043d38bae3b0dd4485de");
+        const user = await User.findById(userId);
         res.send(user)
+    } catch (error) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
+app.delete("/user", async (req, res) => {
+    const emailId = req.body.emailId;
+    try {
+        const users = await User.findOneAndDelete({emailId:emailId})
+        res.send("User deleted Successfully");
+    } catch (error) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
+app.patch("/user", async (req,res)=>{
+    const updatedData = req.body;
+    try{
+        const user = await User.findByIdAndUpdate(updatedData.userId,{$set:req.body},{returnDocument:'after'})
+        res.send("User Updated Successfully");
+    } catch (error) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
+app.patch("/userUpdate", async (req,res)=>{
+    const updatedData = req.body;
+    try{
+        const user = await User.findOneAndUpdate({emailId:updatedData.emailId},{$set:req.body},{returnDocument:'after'})
+        res.send("User Updated Successfully");
     } catch (error) {
         res.status(400).send("Something went wrong");
     }
