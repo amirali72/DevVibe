@@ -49,27 +49,27 @@ app.get("/findbyid", async (req, res) => {
 app.delete("/user", async (req, res) => {
     const emailId = req.body.emailId;
     try {
-        const users = await User.findOneAndDelete({emailId:emailId})
+        const users = await User.findOneAndDelete({ emailId: emailId })
         res.send("User deleted Successfully");
     } catch (error) {
         res.status(400).send("Something went wrong");
     }
 })
 
-app.patch("/user", async (req,res)=>{
+app.patch("/user", async (req, res) => {
     const updatedData = req.body;
-    try{
-        const user = await User.findByIdAndUpdate(updatedData.userId,{$set:req.body},{returnDocument:'after'})
+    try {
+        const user = await User.findByIdAndUpdate(updatedData.userId, { $set: req.body }, { returnDocument: 'after', runValidators: true })
         res.send("User Updated Successfully");
     } catch (error) {
-        res.status(400).send("Something went wrong");
+        res.status(400).send("Something went wrong"+error.message);
     }
 })
 
-app.patch("/userUpdate", async (req,res)=>{
+app.patch("/userUpdate", async (req, res) => {
     const updatedData = req.body;
-    try{
-        const user = await User.findOneAndUpdate({emailId:updatedData.emailId},{$set:req.body},{returnDocument:'after'})
+    try {
+        const user = await User.findOneAndUpdate({ emailId: updatedData.emailId }, { $set: req.body }, { returnDocument: 'after', runValidators: true })
         res.send("User Updated Successfully");
     } catch (error) {
         res.status(400).send("Something went wrong");
