@@ -30,8 +30,11 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    trim: true,
-    minlength: 8,
+    validate(value) {
+      if (!validator.isStrongPassword(value)) {
+        throw new Error("Please add a strong password " + value);
+      }
+    }
   },
   age: {
     type: Number,
