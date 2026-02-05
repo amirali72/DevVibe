@@ -2,14 +2,17 @@ const express = require('express');
 const app = express();
 const connectDB = require("./config/database")
 const User = require("./models/user")
+const { validateSignup } = require("./utils/validation")
 
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-
-    const user = new User(req.body)
-
     try {
+        validateSignup(req)
+
+        const user = new User(req.body)
+
+
         await user.save()
         res.send("User Added Successfully");
     } catch (err) {
@@ -62,10 +65,10 @@ app.patch("/user/:userId", async (req, res) => {
     try {
         const allowedUpdates = ["photoUrl", "skills", "gender", "age", "about"];
         const isAllowedUpdate = Object.keys(updatedData).every((k) => allowedUpdates.includes(k))
-        if(!isAllowedUpdate){
+        if (!isAllowedUpdate) {
             throw new Error("This field can't be updated");
         }
-        if(updatedData?.skills?.length > 10){
+        if (updatedData?.skills?.length > 10) {
             throw new Error("Skills cannot be more than 10");
         }
         const user = await User.findByIdAndUpdate(userId, { $set: req.body }, { returnDocument: 'after', runValidators: true })
