@@ -18,7 +18,7 @@ app.post("/signup", async (req, res) => {
         const user = new User({ firstName, lastName, emailId, password: hashedPassword })
 
         await user.save()
-        res.send("User Added Successfully");
+        res.send("User signed up Successfully");
     } catch (err) {
         res.status(400).send("Error saving the user:" + err.message);
     }
