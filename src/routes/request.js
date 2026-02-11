@@ -6,7 +6,7 @@ const { userAuth } = require('../middleware/auth');
 requestRouter.get("/sendConnectionRequest", userAuth, async (req, res) => {
     try {
         const { firstName } = req.user;
-        res.send(firstName + " is sending the request ")
+        res.send(firstName + " is sending request ")
     } catch (error) {
         res.status(400).send("Error: " + error.message);
     }
