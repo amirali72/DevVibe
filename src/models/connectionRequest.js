@@ -23,7 +23,7 @@ const connectionRequestSchema = new Schema({
     timestamps: true
 });
 
-connectionRequestSchema.index({fromUserId:1, toUserId:1});
+connectionRequestSchema.index({fromUserId:-1, toUserId:-1});
 
 connectionRequestSchema.pre("save", function(){
     const connectionRequest = this;
